@@ -5,6 +5,7 @@ open System.IO
 open System.Collections.Concurrent
 open System.Diagnostics
 open System
+open System.Collections.Generic
 
 type Result<'a> =
   | Success of 'a
@@ -333,6 +334,15 @@ module String =
 
 
 type ConcurrentDictionary<'key, 'value> with
+    member x.TryFind key =
+        match x.TryGetValue key with
+        | true, value -> Some value
+        | _ -> None
+
+    member x.ToSeq() =
+        x |> Seq.map (fun (KeyValue(k, v)) -> k, v)
+
+type Dictionary<'key, 'value> with
     member x.TryFind key =
         match x.TryGetValue key with
         | true, value -> Some value

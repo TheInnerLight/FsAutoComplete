@@ -119,6 +119,7 @@ type ParseAndCheckResults
     with :? TimeoutException -> return None
   }
 
+  #if !FABLE
   member __.GetAllEntities () =
     async {
       try
@@ -143,6 +144,7 @@ type ParseAndCheckResults
       with
       | _ -> return None
   }
+  #endif
 
   member __.GetExtraColorizations = checkResults.GetExtraColorizationsAlternate()
   member __.GetAST = parseResults.ParseTree
@@ -185,7 +187,7 @@ type FSharpCompilerServiceChecker() =
         else oldVersion, oldState))
     |> debug "[LanguageService] %s changed: set status to %A" filePath
 
-
+  #if !FABLE
   let fixFileName path =
     if (try Path.GetFullPath path |> ignore; true with _ -> false) then path
     else
@@ -235,17 +237,20 @@ type FSharpCompilerServiceChecker() =
                |> Seq.filter (fun o -> o.ReferencedProjects |> Array.map (fun (k,v) -> v.ProjectFileName) |> Array.contains option.ProjectFileName )
         yield option
       ])
+  #endif
 
   member __.GetProjectOptionsFromScript(file, source) = async {
     let! rawOptions = checker.GetProjectOptionsFromScript(file, source)
     let opts =
       rawOptions.OtherOptions
+      #if !FABLE
       |> ensureCorrectFSharpCore
       |> ensureCorrectVersions
-
+      #endif
     return { rawOptions with OtherOptions = opts }
   }
 
+  #if !FABLE
   member __.CheckProjectsInBackgroundForFile (file,options : seq<string * FSharpProjectOptions>) =
     defaultArg (getDependingProjects file options) []
     |> List.iter (checker.CheckProjectInBackground)
@@ -265,6 +270,7 @@ type FSharpCompilerServiceChecker() =
         let res = [| yield currentResult; yield! results |]
         return Success res
       }
+  #endif
 
   member __.GetBackgroundCheckResultsForFileInProject =
     checker.GetBackgroundCheckResultsForFileInProject
@@ -276,7 +282,11 @@ type FSharpCompilerServiceChecker() =
     async {
       debug "[LanguageService] ParseAndCheckFileInProject - enter"
       fileChanged filePath version
+      #if !FABLE
       let fixedFilePath = fixFileName filePath
+      #else
+      let fixedFilePath = filePath
+      #endif
       let! res = Async.Catch (async {
           try
                // wait until the previous checking completed
@@ -314,7 +324,7 @@ type FSharpCompilerServiceChecker() =
     |> Option.map (fun (pr, cr, _) -> ParseAndCheckResults (pr, cr))
 
 
-
+  #if !FABLE
   member __.TryGetProjectOptions (file: SourceFilePath, verbose: bool) : Result<_> =
     if not (File.Exists file) then
       Failure (sprintf "File '%s' does not exist" file)
@@ -358,6 +368,7 @@ type FSharpCompilerServiceChecker() =
       with e ->
         Failure e.Message
 
+
   member __.GetUsesOfSymbol (file, options : (SourceFilePath * FSharpProjectOptions) seq, symbol) = async {
     let projects = getDependingProjects file options
     return!
@@ -373,6 +384,8 @@ type FSharpCompilerServiceChecker() =
           |> Async.Parallel
         return res |> Array.collect id }
   }
+
+  #endif
 
   member __.GetDeclarations (fileName, source, options, version) = async {
     let! parseResult =
@@ -410,6 +423,3 @@ type FSharpCompilerServiceChecker() =
          })
       |> Async.Parallel
       |> Async.map (Seq.collect (Seq.collect id) >> Seq.toArray)
-
-
-
