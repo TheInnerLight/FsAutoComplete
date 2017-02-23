@@ -62,7 +62,9 @@ let main argv =
           | Choice1Of2 res ->
              let res' = res |> List.toArray |> Json.toJson
              return! Response.response HttpCode.HTTP_200 res' r
-          | Choice2Of2 e -> return! Response.response HttpCode.HTTP_500 (Json.toJson e) r
+          | Choice2Of2 e ->
+            printfn "%A" e
+            return! Response.response HttpCode.HTTP_500 (Json.toJson e) r
         }
 
     let positionHandler (f : PositionRequest -> ParseAndCheckResults -> string -> string [] -> Async<string list>) : WebPart = fun (r : HttpContext) ->

@@ -1,9 +1,11 @@
 FRAMEWORK: NET45
 NUGET
   remote: https://www.nuget.org/api/v2
+    Chessie (0.6)
+      FSharp.Core
     FAKE (4.50.1)
     FParsec (1.0.2)
-    FSharp.Compiler.Service (11.0.2)
+    FSharp.Compiler.Service (11.0.2) - framework: >= net45
       System.Collections.Immutable (>= 1.2)
       System.Reflection.Metadata (>= 1.4.1-beta-24227-04)
     FSharp.Compiler.Service.ProjectCracker (11.0.2)
@@ -31,12 +33,33 @@ NUGET
       NUnit.Extension.TeamCityEventListener (>= 1.0.2)
       NUnit.Extension.VSProjectLoader (>= 3.5)
     Octokit (0.24)
+    Paket.Core (3.28)
+      Chessie (>= 0.6)
+      FSharp.Core (>= 0.0.0-prerelease)
+      Mono.Cecil (>= 0.0.0-prerelease)
+      Newtonsoft.Json
+      System.Diagnostics.FileVersionInfo (>= 0.0.0-prerelease)
+      System.Diagnostics.Process (>= 0.0.0-prerelease)
+      System.Diagnostics.TraceSource (>= 0.0.0-prerelease)
+      System.Security.Cryptography.Algorithms (>= 0.0.0-prerelease)
+      System.Security.Cryptography.ProtectedData (>= 0.0.0-prerelease)
+      System.Xml.XDocument (>= 0.0.0-prerelease)
+      System.Xml.XPath.XDocument (>= 0.0.0-prerelease)
+      System.Xml.XPath.XmlDocument (>= 0.0.0-prerelease)
     Suave (1.1.3)
       FSharp.Core (>= 3.1.2.5)
     System.Collections.Immutable (1.3.1)
+    System.Diagnostics.FileVersionInfo (4.3)
+    System.Diagnostics.Process (4.3)
+    System.Diagnostics.TraceSource (4.3)
     System.Reflection.Metadata (1.4.2)
       System.Collections.Immutable (>= 1.3.1)
+    System.Security.Cryptography.Algorithms (4.3)
+    System.Security.Cryptography.ProtectedData (4.3)
     System.ValueTuple (4.3) - redirects: on
+    System.Xml.XDocument (4.3)
+    System.Xml.XPath.XDocument (4.3)
+    System.Xml.XPath.XmlDocument (4.3)
 GITHUB
   remote: fsharp/FAKE
     modules/Octokit/Octokit.fsx (33e702f6c220f3facaf41f20dae03a912eeebf9a)
