@@ -5,16 +5,16 @@ NUGET
       FSharp.Core
     FAKE (4.50.1)
     FParsec (1.0.2)
-    FSharp.Compiler.Service (11.0.2) - framework: >= net45
+    FSharp.Compiler.Service (11.0.4)
       System.Collections.Immutable (>= 1.2)
       System.Reflection.Metadata (>= 1.4.1-beta-24227-04)
-    FSharp.Compiler.Service.ProjectCracker (11.0.2)
+    FSharp.Compiler.Service.ProjectCracker (11.0.4)
     FSharp.Core (4.1) - redirects: on
       System.ValueTuple (>= 4.3)
-    FSharpLint.Core (0.7.1-beta)
+    FSharpLint.Core (0.7.3-beta)
       FParsec (>= 1.0.2)
-      FSharp.Compiler.Service (>= 10.0.1)
-      FSharp.Compiler.Service.ProjectCracker (>= 10.0.1)
+      FSharp.Compiler.Service (>= 11.0.2)
+      FSharp.Compiler.Service.ProjectCracker (>= 11.0.2)
     Mono.Cecil (0.9.6.4)
     NDesk.Options (0.2.1)
     Newtonsoft.Json (9.0.1)
@@ -33,33 +33,17 @@ NUGET
       NUnit.Extension.TeamCityEventListener (>= 1.0.2)
       NUnit.Extension.VSProjectLoader (>= 3.5)
     Octokit (0.24)
-    Paket.Core (3.28)
-      Chessie (>= 0.6)
-      FSharp.Core (>= 0.0.0-prerelease)
-      Mono.Cecil (>= 0.0.0-prerelease)
+    Paket.Core (3.20.2)
+      Chessie
+      FSharp.Core
+      Mono.Cecil
       Newtonsoft.Json
-      System.Diagnostics.FileVersionInfo (>= 0.0.0-prerelease)
-      System.Diagnostics.Process (>= 0.0.0-prerelease)
-      System.Diagnostics.TraceSource (>= 0.0.0-prerelease)
-      System.Security.Cryptography.Algorithms (>= 0.0.0-prerelease)
-      System.Security.Cryptography.ProtectedData (>= 0.0.0-prerelease)
-      System.Xml.XDocument (>= 0.0.0-prerelease)
-      System.Xml.XPath.XDocument (>= 0.0.0-prerelease)
-      System.Xml.XPath.XmlDocument (>= 0.0.0-prerelease)
     Suave (1.1.3)
       FSharp.Core (>= 3.1.2.5)
     System.Collections.Immutable (1.3.1)
-    System.Diagnostics.FileVersionInfo (4.3)
-    System.Diagnostics.Process (4.3)
-    System.Diagnostics.TraceSource (4.3)
     System.Reflection.Metadata (1.4.2)
       System.Collections.Immutable (>= 1.3.1)
-    System.Security.Cryptography.Algorithms (4.3)
-    System.Security.Cryptography.ProtectedData (4.3)
     System.ValueTuple (4.3) - redirects: on
-    System.Xml.XDocument (4.3)
-    System.Xml.XPath.XDocument (4.3)
-    System.Xml.XPath.XmlDocument (4.3)
 GITHUB
   remote: fsharp/FAKE
     modules/Octokit/Octokit.fsx (33e702f6c220f3facaf41f20dae03a912eeebf9a)
