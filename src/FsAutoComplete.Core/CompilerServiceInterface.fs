@@ -330,16 +330,41 @@ type FSharpCompilerServiceChecker() =
         let po =
             match po.ProjectFileNames with
             | [||] ->
-                 let compileFiles, otherOptions =
-                    po.OtherOptions |> Array.partition (fun (s:string) -> s.EndsWith(".fs"))
-                 { po with ProjectFileNames = compileFiles; OtherOptions = otherOptions }
-            | _ -> po
+                let compileFiles, otherOptions =
+                    po.OtherOptions |> Array.partition (fun (s:string) -> s.EndsWith(".fs") || s.EndsWith (".fsi"))
+                { po with ProjectFileNames = compileFiles; OtherOptions = otherOptions }
+            | _ -> 
+                let fsiFiles, otherOptions =
+                    po.OtherOptions |> Array.partition (fun (s:string) -> s.EndsWith (".fsi"))
+                let fileNames = 
+                    po.ProjectFileNames 
+                    |> Array.fold (fun acc e -> 
+                        match fsiFiles |> Array.tryFind ((=) (e + "i")) with
+                        | Some fsi ->
+                            [| yield! acc; yield fsi; yield e  |]
+                        | None -> [| yield! acc; yield e |] ) [||]
+
+                { po with ProjectFileNames = fileNames ; OtherOptions = otherOptions }
+                
 
         let po = { po with ProjectFileNames = po.ProjectFileNames |> Array.map normalizeDirSeparators }
         let outputFile = Seq.tryPick (chooseByPrefix "--out:") po.OtherOptions
         let references = Seq.choose (chooseByPrefix "-r:") po.OtherOptions
 
         Success (po, Array.toList po.ProjectFileNames, outputFile, Seq.toList references, logMap)
+      with e ->
+        Failure e.Message
+
+  member __.TryGetProjectJsonProjectOptions (file : SourceFilePath) : Result<_> =
+    if not (File.Exists file) then
+      Failure (sprintf "File '%s' does not exist" file)
+    else
+      try
+        let po = ProjectCoreCracker.GetProjectOptionsFromResponseFile file
+        let compileFiles = Seq.filter (fun (s:string) -> s.EndsWith(".fs")) po.OtherOptions
+        let outputFile = Seq.tryPick (chooseByPrefix "--out:") po.OtherOptions
+        let references = Seq.choose (chooseByPrefix "-r:") po.OtherOptions
+        Success (po, Seq.toList compileFiles, outputFile, Seq.toList references, Map<string,string>([||]))
       with e ->
         Failure e.Message
 
